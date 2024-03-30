@@ -23,6 +23,14 @@
     },
     "type": "module",
     "dependencies": {
-        "@vercel/analytics": "^1.1.1"
+        "@vercel/analytics": "^1.1.1",
+        "@vercel/speed-insights": "^1.0.10",
+        "bits-ui": "^0.21.0",
+        "clsx": "^2.1.0",
+        "embla-carousel-svelte": "^8.0.0",
+        "lucide-svelte": "^0.363.0",
+        "tailwind-merge": "^2.2.2",
+        "tailwind-variants": "^0.2.1",
+        "vaul-svelte": "^0.3.0"
     }
 }

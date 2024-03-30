@@ -1,3 +1,9 @@
-<h1>Welcome</h1>
+<script>
+    import MyWork from "$lib/components/MyWork.svelte";
+    import AboutMe from "$lib/components/AboutMe.svelte";
+    import { Separator } from "$lib/components/ui/separator";
+</script>
 
-<h3>Work in progress</h3>
+<AboutMe />
+<Separator class="my-4 bg-gray-300" />
+<MyWork />
