@@ -1,9 +1,48 @@
 <script lang="ts">
   import PageTransition from "$lib/components/transition.svelte";
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   export let data;
 
   let selectedMenuItem = "" as "aboutMe" | "myWork" | "cv";
+
+  onMount(() => {
+    const checkScroll = () => {
+      const cvElement = document.getElementById("cv");
+      const aboutMeElement = document.getElementById("aboutMe");
+      const myWorkElement = document.getElementById("myWork");
+
+      const myWorkInView =
+        myWorkElement &&
+        myWorkElement.getBoundingClientRect().top <= window.innerHeight &&
+        myWorkElement.getBoundingClientRect().bottom >= 0 &&
+        myWorkElement.offsetHeight > window.innerHeight / 2;
+      const cvInView =
+        cvElement &&
+        cvElement.getBoundingClientRect().top <= window.innerHeight &&
+        cvElement.getBoundingClientRect().bottom >= 0 &&
+        cvElement.offsetHeight > window.innerHeight / 2;
+      const aboutMeInView =
+        aboutMeElement &&
+        aboutMeElement.getBoundingClientRect().top <= window.innerHeight &&
+        aboutMeElement.getBoundingClientRect().bottom >= 0 &&
+        aboutMeElement.offsetHeight > window.innerHeight / 2;
+
+      if (myWorkInView) {
+        selectedMenuItem = "myWork";
+      } else if (aboutMeInView) {
+        selectedMenuItem = "aboutMe";
+      } else if (myWorkInView) {
+        selectedMenuItem = "cv";
+      }
+    };
+
+    window.addEventListener("scroll", checkScroll);
+
+    // Clean up the event listener when the component is destroyed
+    onDestroy(() => {
+      window.removeEventListener("scroll", checkScroll);
+    });
+  });
 </script>
 
 <div class="max-w-7xl mx-auto">
@@ -13,7 +52,6 @@
         <div class="">
           <button
             on:click={() => {
-              selectedMenuItem = "cv";
               const element = document.getElementById("cv");
 
               if (element) {
@@ -45,7 +83,6 @@
         <div>
           <button
             on:click={() => {
-              selectedMenuItem = "aboutMe";
               const element = document.getElementById("aboutMe");
 
               if (element) {
@@ -80,7 +117,6 @@
           <button
             class=""
             on:click={() => {
-              selectedMenuItem = "myWork";
               const element = document.getElementById("myWork");
 
               if (element) {
