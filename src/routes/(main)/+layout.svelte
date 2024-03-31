@@ -213,7 +213,7 @@
             </div>
         </div>
         <div
-            class="fixed z-50 bottom-4 right-4 bg-teal-500 rounded-full h-12 w-12 flex items-center justify-center"
+            class="xl:hidden fixed z-50 bottom-4 right-4 bg-teal-500 rounded-full h-12 w-12 flex items-center justify-center"
         >
             <button
                 on:click={() => {
