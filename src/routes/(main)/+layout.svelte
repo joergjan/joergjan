@@ -17,17 +17,19 @@
         myWorkElement &&
         myWorkElement.getBoundingClientRect().top <= window.innerHeight &&
         myWorkElement.getBoundingClientRect().bottom >= 0 &&
-        myWorkElement.offsetHeight > window.innerHeight / 2;
+        myWorkElement.offsetHeight > window.innerHeight / 3;
       const cvInView =
         cvElement &&
         cvElement.getBoundingClientRect().top <= window.innerHeight &&
         cvElement.getBoundingClientRect().bottom >= 0 &&
-        cvElement.offsetHeight > window.innerHeight / 2;
+        cvElement.offsetHeight > window.innerHeight / 3;
       const aboutMeInView =
         aboutMeElement &&
         aboutMeElement.getBoundingClientRect().top <= window.innerHeight &&
         aboutMeElement.getBoundingClientRect().bottom >= 0 &&
-        aboutMeElement.offsetHeight > window.innerHeight / 2;
+        aboutMeElement.offsetHeight > window.innerHeight / 3;
+
+      console.log(myWorkInView);
 
       if (myWorkInView) {
         selectedMenuItem = "myWork";
@@ -60,8 +62,8 @@
 <div class="max-w-7xl mx-auto">
   <div class="xl:grid xl:grid-cols-6">
     <div class="xl:col-span-1 xl:block hidden fixed h-screen">
-      <div class="absolute top-1/2 left-12 grid gap-4 w-32 text-left">
-        <div class="">
+      <div class="absolute bottom-[15rem] left-12 grid gap-4 w-32 text-left">
+        <div>
           <button
             on:click={() => {
               const element = document.getElementById("cv");
@@ -231,7 +233,8 @@
           showMobileMenu = false;
         }}
         class="fixed z-20 bg-black bg-opacity-50 top-0 bottom-0 right-0 left-0 backdrop-blur-[2px]"
-      ></button>
+      >
+      </button>
       <div
         in:slide
         out:slide

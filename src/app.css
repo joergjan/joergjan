@@ -3,92 +3,52 @@
 @tailwind utilities;
 
 @layer base {
-    /*
-    .bright {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 3.9%;
-
-        --muted: 0 0% 96.1%;
-        --muted-foreground: 0 0% 45.1%;
-
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 3.9%;
-
-        --card: 0 0% 100%;
-        --card-foreground: 0 0% 3.9%;
-
-        --border: 0 0% 89.8%;
-        --input: 0 0% 89.8%;
-
-        --primary: 0 0% 9%;
-        --primary-foreground: 0 0% 98%;
-
-        --secondary: 0 0% 96.1%;
-        --secondary-foreground: 0 0% 9%;
-
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
-
-        --destructive: 0 72.2% 50.6%;
-        --destructive-foreground: 0 0% 98%;
-
-        --ring: 0 0% 3.9%;
-
-        --radius: 0.5rem;
-    }
-    */
-
-    :root {
-        --background: 180 16% 12%;
-        --foreground: 0 0% 98%;
-
-        --muted: 0 0% 14.9%;
-        --muted-foreground: 0 0% 63.9%;
-
-        --popover: 0 0% 3.9%;
-        --popover-foreground: 0 0% 98%;
-
-        --card: 0 0% 3.9%;
-        --card-foreground: 0 0% 98%;
-
-        --border: 0 0% 14.9%;
-        --input: 0 0% 14.9%;
-
-        --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
-
-        --secondary: 0 0% 14.9%;
-        --secondary-foreground: 0 0% 98%;
-
-        --accent: 0 0% 14.9%;
-        --accent-foreground: 0 0% 98%;
-
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-
-        --ring: 0 0% 83.1%;
-    }
+  :root {
+    --background: 217 33% 17%;
+    --foreground: 210 40% 98%;
+    --card: 215 25% 27%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+    --radius: 0.75rem;
+  }
 }
 
 @layer base {
-    * {
-        @apply border-border;
-    }
-    body {
-        @apply bg-background text-foreground;
-    }
-    html {
-        @apply text-slate-800;
-        font-family: "Mukta", sans-serif;
-        @apply text-center selection:bg-teal-500 selection:text-white;
-        @apply text-center overflow-auto;
-    }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    font-family: "Mukta", sans-serif;
+    @apply text-center selection:bg-teal-500 selection:text-white;
+    @apply overflow-auto;
+  }
 }
 
 h1 {
-    @apply text-4xl font-bold pt-10;
+  @apply text-4xl font-bold pt-10;
 }
 
 h2 {
-    @apply text-3xl font-bold pt-5;
+  @apply text-3xl font-bold pt-5;
+}
+
+h3 {
+  @apply text-2xl font-bold pt-5;
 }
