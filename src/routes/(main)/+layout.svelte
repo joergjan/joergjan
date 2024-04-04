@@ -29,8 +29,6 @@
         aboutMeElement.getBoundingClientRect().bottom >= 0 &&
         aboutMeElement.offsetHeight > window.innerHeight / 3;
 
-      console.log(myWorkInView);
-
       if (myWorkInView) {
         selectedMenuItem = "myWork";
       } else if (aboutMeInView) {
