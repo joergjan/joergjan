@@ -1,3 +1,3 @@
-<h1>Welcome</h1>
-
-<h3>Work in progress</h3>
+<h1>About Me</h1>
+<br />
+<p>(Hobby) Software Developer based in Winterthur, Switzerland</p>

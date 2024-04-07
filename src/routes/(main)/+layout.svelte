@@ -1,173 +1,202 @@
-<script>
-    import "../../app.css";
-    import { navItems } from "$lib/client/navbar";
+<script lang="ts">
     import { fade } from "svelte/transition";
-    import PageTransition from "$lib/client/components/transition.svelte";
-    import { onMount } from "svelte";
+    import { currentPage } from "$lib/client/stores";
+    import { onMount, beforeUpdate } from "svelte";
+    import type { PageData } from "./$types";
+    import { titles } from "$lib/client/navbar";
 
-    onMount(() => {
-        if (localStorage.getItem("cookies_enabled") === "0") {
-            cookie = false;
+    import PageTransition from "$lib/components/transition.svelte";
+
+    export let data: PageData;
+
+    let mobileMenu = false;
+    let isMobile = false;
+    let tabTitle = `Jan Jörg`;
+
+    function menuToggle() {
+        if (mobileMenu) {
+            mobileMenu = false;
         } else {
-            cookie = true;
-        }
-    });
-
-    let cookie = false;
-    export let data;
-    export let navMenu = false;
-
-    function toggleNavMenu() {
-        if (navMenu) {
-            navMenu = false;
-        } else {
-            navMenu = true;
+            mobileMenu = true;
         }
     }
+
+    $: data.url && updateCurrentPage();
+
+    function updateCurrentPage() {
+        if (data.url === "/") {
+            $currentPage = 0;
+            return;
+        }
+
+        for (let i = 0; i < titles.length; i++) {
+            if (data.url.includes(titles[i].path)) {
+                $currentPage = i + 1;
+                break;
+            }
+        }
+    }
+
+    onMount(() => {
+        isMobile = window.innerWidth <= 1024;
+    });
+
+    function checkTitleIndex() {
+        if (data.url === "/") {
+            return -1;
+        } else {
+            for (let i = 0; i < titles.length; i++) {
+                if (data.url.includes(titles[i].path)) {
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+
+    onMount(() => {
+        window.addEventListener("popstate", updateTitle);
+        updateTitle();
+    });
+
+    function updateTitle() {
+        if (checkTitleIndex() === -1) {
+            tabTitle = "Jan Jörg";
+            return;
+        }
+        tabTitle = titles[checkTitleIndex()].title;
+    }
+
+    beforeUpdate(updateTitle);
 </script>
 
-<header class="my-5 h-10">
-    <div class="flex items-center justify-center">
-        <nav class="max-w-7xl md:block hidden" aria-label="Global">
-            <div class="flex space-x-10">
-                {#each navItems as navItem}
-                    <a href={navItem.href}>
-                        <p class="uppercase">
-                            {navItem.name}
-                        </p>
-                    </a>
-                {/each}
-            </div>
-        </nav>
-    </div>
-    <nav
-        class="max-w-7xl flex md:hidden items-center justify-end relative"
-        aria-label="Global"
-    >
-        <a href="/">
-            <img
-                class="h-14 absolute -top-3 left-0 z-50"
-                src="/logo.png"
-                alt="Linda"
-            />
-        </a>
+<svelte:head>
+    <title>{tabTitle}</title>
+</svelte:head>
 
-        <button class="absolute top-0 right-5 z-50" on:click={toggleNavMenu}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24"
-                class="fill-white {navMenu ? 'rotate' : ''}"
-                viewBox="0 -960 960 960"
-                width="24"
-            >
-                {#if navMenu}
-                    <path
-                        d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
-                    />
-                {:else}
-                    <path
-                        d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
-                    />
-                {/if}
-            </svg>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24"
-                viewBox="0 -960 960 960"
-                width="24"
-            ></svg>
-        </button>
+<div class="bg-background h-3 sticky top-0 w-screen z-30"></div>
+
+<header
+    class="sticky top-0 w-screen right-0 mx-auto left-0 max-w-7xl z-40 overflow-hidden"
+>
+    <nav class="bg-sky-800 rounded-lg shadow-lg mx-3 mt-3 px-7 z-10">
+        <div class="flex h-16 py-2 justify-between">
+            <div class="flex flex-shrink-0 items-center">
+                <button
+                    class="group"
+                    on:click={() => {
+                        mobileMenu = false;
+                    }}
+                >
+                    <a href="/" class=" z-30">
+                        <svg
+                            class="{$currentPage !== 0
+                                ? 'fill-white'
+                                : 'fill-sky-300'} group-hover:fill-sky-300 transition-all duration-400"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24"
+                            viewBox="0 -960 960 960"
+                            width="24"
+                        >
+                            <path
+                                d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"
+                            />
+                        </svg>
+                    </a>
+                </button>
+            </div>
+
+            <ul class="hidden lg:flex justify-end space-x-24 w-full">
+                {#each titles as title, i}
+                    <li
+                        class={$currentPage === i + 1
+                            ? "inline-flex items-center text-sky-300"
+                            : "inline-flex items-center hover:text-sky-300  hover:transition-all hover:duration-[400ms];"}
+                    >
+                        <button class="relative group">
+                            <a href={title.path}>
+                                <p class="font-semibold">
+                                    {title.name}
+                                </p>
+                            </a>
+                        </button>
+                    </li>
+                {/each}
+            </ul>
+
+            <div class="lg:hidden flex items-center">
+                <button class="" on:click={menuToggle}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        class="fill-white transition-all duration-300 {mobileMenu
+                            ? 'rotate-90'
+                            : ''}"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                    >
+                        {#if mobileMenu}
+                            <path
+                                d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
+                            />
+                        {:else}
+                            <path
+                                d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
+                            />
+                        {/if}
+                    </svg>
+                </button>
+            </div>
+        </div>
     </nav>
 </header>
 
-{#if navMenu}
+{#if mobileMenu}
     <div
         in:fade={{ duration: 150 }}
         out:fade={{ duration: 150, delay: 150 }}
-        class="absolute top-10 w-screen h-screen z-40 bg-gray-800"
+        class="fixed top-0 w-screen h-screen bg-background z-20"
     >
-        <div class="pt-10">
-            {#each navItems as navItem}
-                <div class="mt-5">
-                    <button on:click={toggleNavMenu}>
-                        <a href={navItem.href}>
-                            <p class="uppercase">
-                                {navItem.name}
-                            </p>
-                        </a>
-                    </button>
-                </div>
-            {/each}
-        </div>
-    </div>
-{/if}
-
-<main class="flex items-center justify-center relative">
-    <div class="max-w-7xl min-h-[25rem] z-10">
-        <PageTransition key={data.url}>
-            <slot />
-        </PageTransition>
-    </div>
-</main>
-
-<footer class="flex items-center justify-center my-5">
-    <nav class="max-w-7xl" aria-label="Global">
-        <div class="">
-            {#each navItems as navItem}
-                <a href={navItem.href}>
-                    <p>
-                        {navItem.name}
+        <div class="pt-28">
+            {#each titles as title, i}
+                <a
+                    href={title.path}
+                    class="block px-4 py-2 hover place-content-end text-center"
+                    on:click={menuToggle}
+                >
+                    <p class="font-semibold text-lg">
+                        {title.name}
                     </p>
                 </a>
             {/each}
-            <a href="/impressum">Impressum</a>
-        </div>
-    </nav>
-</footer>
-
-<!-- Cookie Banner -->
-{#if cookie}
-    <div
-        class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:p-6"
-    >
-        <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
-            <div
-                class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-slate-700 shadow-lg text-white"
-            >
-                <div class="p-4">
-                    <div class="flex items-center">
-                        <div class="flex w-0 flex-1 justify-between">
-                            <p class="w-0 flex-1 text-sm font-medium">
-                                Hier gibt es keine 🍪
-                            </p>
-                            <button
-                                type="button"
-                                name="Cookies Button"
-                                class="ml-3 flex-shrink-0 rounded-md text-sm font-medium"
-                                on:click={() => {
-                                    cookie = false;
-                                    localStorage.setItem(
-                                        "cookies_enabled",
-                                        "0"
-                                    );
-                                }}
-                            >
-                                Okay
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 {/if}
 
-<style>
-    svg {
-        transition: transform 0.3s ease;
-    }
+<PageTransition key={data.url}>
+    <main class="max-w-7xl mx-auto -mt-4">
+        <div>
+            <slot />
+        </div>
+    </main>
+</PageTransition>
 
-    svg.rotate {
-        transform: rotate(90deg);
-    }
-</style>
+<footer>
+    <div class="mx-auto max-w-7xl overflow-hidden pb-20 pt-0 px-3">
+        <div class="bg-sky-800 h-1 mt-10 mb-8" />
+
+        <div class="mx-auto max-w-7xl overflow-hidden pb-20 pt-0 px-6 xl:px-8">
+            <nav
+                class="-mb-6 columns-2 md:flex md:justify-center md:space-x-12"
+                aria-label="Footer"
+            >
+                {#each titles as title, i}
+                    <div class="pb-6">
+                        <a href={title.path} class="hover"> {title.name}</a>
+                    </div>
+                {/each}
+            </nav>
+        </div>
+        <div class="mb-32" />
+    </div>
+</footer>
