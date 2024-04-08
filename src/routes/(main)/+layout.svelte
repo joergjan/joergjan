@@ -1,83 +1,83 @@
 <script lang="ts">
-    import { fade } from "svelte/transition";
-    import { currentPage } from "$lib/client/stores";
-    import { onMount, beforeUpdate } from "svelte";
-    import type { PageData } from "./$types";
-    import { titles } from "$lib/client/navbar";
+  import { fade } from "svelte/transition";
+  import { currentPage } from "$lib/client/stores";
+  import { onMount, beforeUpdate } from "svelte";
+  import type { PageData } from "./$types";
+  import { titles } from "$lib/client/navbar";
 
-    import PageTransition from "$lib/components/transition.svelte";
+  import PageTransition from "$lib/components/transition.svelte";
 
-    export let data: PageData;
+  export let data: PageData;
 
-    let mobileMenu = false;
-    let isMobile = false;
-    let tabTitle = `Jan Jörg`;
+  let mobileMenu = false;
+  let isMobile = false;
+  let tabTitle = `Jan Jörg`;
 
-    function menuToggle() {
-        if (mobileMenu) {
-            mobileMenu = false;
-        } else {
-            mobileMenu = true;
-        }
+  function menuToggle() {
+    if (mobileMenu) {
+      mobileMenu = false;
+    } else {
+      mobileMenu = true;
+    }
+  }
+
+  $: data.url && updateCurrentPage();
+
+  function updateCurrentPage() {
+    if (data.url === "/") {
+      $currentPage = 0;
+      return;
     }
 
-    $: data.url && updateCurrentPage();
-
-    function updateCurrentPage() {
-        if (data.url === "/") {
-            $currentPage = 0;
-            return;
-        }
-
-        for (let i = 0; i < titles.length; i++) {
-            if (data.url.includes(titles[i].path)) {
-                $currentPage = i + 1;
-                break;
-            }
-        }
+    for (let i = 0; i < titles.length; i++) {
+      if (data.url.includes(titles[i].path)) {
+        $currentPage = i + 1;
+        break;
+      }
     }
+  }
 
-    onMount(() => {
-        isMobile = window.innerWidth <= 1024;
-    });
+  onMount(() => {
+    isMobile = window.innerWidth <= 1024;
+  });
 
-    function checkTitleIndex() {
-        if (data.url === "/") {
-            return -1;
-        } else {
-            for (let i = 0; i < titles.length; i++) {
-                if (data.url.includes(titles[i].path)) {
-                    return i;
-                }
-            }
+  function checkTitleIndex() {
+    if (data.url === "/") {
+      return -1;
+    } else {
+      for (let i = 0; i < titles.length; i++) {
+        if (data.url.includes(titles[i].path)) {
+          return i;
         }
-        return 0;
+      }
     }
+    return 0;
+  }
 
-    onMount(() => {
-        window.addEventListener("popstate", updateTitle);
-        updateTitle();
-    });
+  onMount(() => {
+    window.addEventListener("popstate", updateTitle);
+    updateTitle();
+  });
 
-    function updateTitle() {
-        if (checkTitleIndex() === -1) {
-            tabTitle = "Jan Jörg";
-            return;
-        }
-        tabTitle = titles[checkTitleIndex()].title;
+  function updateTitle() {
+    if (checkTitleIndex() === -1) {
+      tabTitle = "Jan Jörg";
+      return;
     }
+    tabTitle = titles[checkTitleIndex()].title;
+  }
 
-    beforeUpdate(updateTitle);
+  beforeUpdate(updateTitle);
 </script>
 
 <svelte:head>
-    <title>{tabTitle}</title>
+  <title>{tabTitle}</title>
 </svelte:head>
 
-<div class="bg-background h-3 sticky top-0 w-screen z-30"></div>
+<div class="fixed top-0 w-screen h-16 bg-background z-40"></div>
 
 <header
-    class="sticky top-0 w-screen right-0 mx-auto left-0 max-w-7xl z-40 overflow-hidden"
+  class="fixed top-0 w-screen right-0 mx-auto left-0 max-w-7xl z-40 overflow-hidden"
 >
   <div class="px-5">
     <div class="flex h-16 py-2 justify-start">
@@ -161,51 +161,51 @@
 </header>
 
 {#if mobileMenu}
-    <div
-        in:fade={{ duration: 150 }}
-        out:fade={{ duration: 150, delay: 150 }}
-        class="fixed top-0 w-screen h-screen bg-background z-20"
-    >
-        <div class="pt-28">
-            {#each titles as title, i}
-                <a
-                    href={title.path}
-                    class="block px-4 py-2 hover place-content-end text-center"
-                    on:click={menuToggle}
-                >
-                    <p class="font-semibold text-lg">
-                        {title.name}
-                    </p>
-                </a>
-            {/each}
-        </div>
+  <div
+    in:fade={{ duration: 150 }}
+    out:fade={{ duration: 150, delay: 150 }}
+    class="fixed top-0 w-screen h-screen bg-background z-20"
+  >
+    <div class="pt-28">
+      {#each titles as title, i}
+        <a
+          href={title.path}
+          class="block px-4 py-2 hover place-content-end text-center"
+          on:click={menuToggle}
+        >
+          <p class="font-semibold text-lg">
+            {title.name}
+          </p>
+        </a>
+      {/each}
     </div>
+  </div>
 {/if}
 
 <PageTransition key={data.url}>
-    <main class="max-w-7xl mx-auto -mt-4">
-        <div>
-            <slot />
-        </div>
-    </main>
+  <main class="max-w-7xl mx-auto -mt-4">
+    <div class="mt-16 mx-3">
+      <slot />
+    </div>
+  </main>
 </PageTransition>
 
 <footer>
   <div class="mx-auto max-w-7xl overflow-hidden pb-20 pt-0 px-3">
     <div class="bg-sky-300 h-1 mt-10 mb-8" />
 
-        <div class="mx-auto max-w-7xl overflow-hidden pb-20 pt-0 px-6 xl:px-8">
-            <nav
-                class="-mb-6 columns-2 md:flex md:justify-center md:space-x-12"
-                aria-label="Footer"
-            >
-                {#each titles as title, i}
-                    <div class="pb-6">
-                        <a href={title.path} class="hover"> {title.name}</a>
-                    </div>
-                {/each}
-            </nav>
-        </div>
-        <div class="mb-32" />
+    <div class="mx-auto max-w-7xl overflow-hidden pb-20 pt-0 px-6 xl:px-8">
+      <nav
+        class="-mb-6 columns-2 md:flex md:justify-center md:space-x-12"
+        aria-label="Footer"
+      >
+        {#each titles as title, i}
+          <div class="pb-6">
+            <a href={title.path} class="hover"> {title.name}</a>
+          </div>
+        {/each}
+      </nav>
     </div>
+    <div class="mb-32" />
+  </div>
 </footer>
