@@ -79,76 +79,85 @@
 <header
     class="sticky top-0 w-screen right-0 mx-auto left-0 max-w-7xl z-40 overflow-hidden"
 >
-    <nav class="bg-sky-800 rounded-lg shadow-lg mx-3 mt-3 px-7 z-10">
-        <div class="flex h-16 py-2 justify-between">
-            <div class="flex flex-shrink-0 items-center">
-                <button
-                    class="group"
-                    on:click={() => {
-                        mobileMenu = false;
-                    }}
-                >
-                    <a href="/" class=" z-30">
-                        <svg
-                            class="{$currentPage !== 0
-                                ? 'fill-white'
-                                : 'fill-sky-300'} group-hover:fill-sky-300 transition-all duration-400"
-                            xmlns="http://www.w3.org/2000/svg"
-                            height="24"
-                            viewBox="0 -960 960 960"
-                            width="24"
-                        >
-                            <path
-                                d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"
-                            />
-                        </svg>
-                    </a>
-                </button>
-            </div>
+  <div class="px-5">
+    <div class="flex h-16 py-2 justify-start">
+      <div class="flex flex-shrink-0 items-center">
+        <button
+          class="group"
+          on:click={() => {
+            mobileMenu = false;
+          }}
+        >
+          <a href="/" class=" z-30">
+            <svg
+              class="{$currentPage !== 0
+                ? 'fill-white'
+                : 'fill-sky-300'} group-hover:fill-sky-300 transition-all duration-400"
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 -960 960 960"
+              width="24"
+            >
+              <path
+                d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"
+              />
+            </svg>
+          </a>
+        </button>
+      </div>
 
-            <ul class="hidden lg:flex justify-end space-x-24 w-full">
-                {#each titles as title, i}
-                    <li
-                        class={$currentPage === i + 1
-                            ? "inline-flex items-center text-sky-300"
-                            : "inline-flex items-center hover:text-sky-300  hover:transition-all hover:duration-[400ms];"}
-                    >
-                        <button class="relative group">
-                            <a href={title.path}>
-                                <p class="font-semibold">
-                                    {title.name}
-                                </p>
-                            </a>
-                        </button>
-                    </li>
-                {/each}
-            </ul>
-
-            <div class="lg:hidden flex items-center">
-                <button class="" on:click={menuToggle}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24"
-                        class="fill-white transition-all duration-300 {mobileMenu
-                            ? 'rotate-90'
-                            : ''}"
-                        viewBox="0 -960 960 960"
-                        width="24"
-                    >
-                        {#if mobileMenu}
-                            <path
-                                d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
-                            />
-                        {:else}
-                            <path
-                                d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
-                            />
-                        {/if}
-                    </svg>
+      <ul class="hidden xl:flex ml-16 w-full">
+        <div
+          class="justify-start flex items-center w-full divide-x-2 divide-white"
+        >
+          {#each titles as title, i}
+            <li
+              class={$currentPage === i + 1
+                ? "items-center text-sky-300"
+                : "items-center hover:text-sky-300 hover:transition-all hover:duration-[400ms]"}
+            >
+              <div class="mx-12">
+                <button class="relative group">
+                  <a href={title.path}>
+                    <p class="font-semibold inline-flex">
+                      {title.name}
+                    </p>
+                  </a>
                 </button>
-            </div>
+              </div>
+            </li>
+          {/each}
         </div>
-    </nav>
+        <li class="justify-end flex w-full items-center underline">
+          <a href="mailto:contact@jan-joerg.ch">contact me</a>
+        </li>
+      </ul>
+
+      <div class="xl:hidden flex items-center justify-end w-full">
+        <button class="" on:click={menuToggle}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            class="fill-white transition-all duration-300 {mobileMenu
+              ? 'rotate-90'
+              : ''}"
+            viewBox="0 -960 960 960"
+            width="24"
+          >
+            {#if mobileMenu}
+              <path
+                d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
+              />
+            {:else}
+              <path
+                d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
+              />
+            {/if}
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
 </header>
 
 {#if mobileMenu}
@@ -182,8 +191,8 @@
 </PageTransition>
 
 <footer>
-    <div class="mx-auto max-w-7xl overflow-hidden pb-20 pt-0 px-3">
-        <div class="bg-sky-800 h-1 mt-10 mb-8" />
+  <div class="mx-auto max-w-7xl overflow-hidden pb-20 pt-0 px-3">
+    <div class="bg-sky-300 h-1 mt-10 mb-8" />
 
         <div class="mx-auto max-w-7xl overflow-hidden pb-20 pt-0 px-6 xl:px-8">
             <nav
